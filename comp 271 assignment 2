@@ -1,0 +1,55 @@
+import java.util.Arrays;
+
+public class GradeSchoolMultiplication {
+    public static int[] multiply(int[] num1, int[] num2, int base) {
+        // This will create an array for the final result with a size of num1.length + num2.length
+        int[] output = new int[num1.length + num2.length];
+        
+        // This will loop through each digit of num1 (starting from the rightmost digit)
+        for (int i = num1.length - 1; i >= 0; i--) {
+            // This will loop through each digit of num2 (starting from the rightmost digit)
+            for (int j = num2.length - 1; j >= 0; j--) {
+                // This will calculate the product of the current digits of num1 and num2
+                int product = num1[i] * num2[j];
+                
+                // This will calculate the position where the product will be stored in the result array
+                int index = i + j + 1;
+
+                // This will add the product to the current value in the output array at the calculated index
+                output[index] += product;
+
+                // This will handle any carry by adding the overflow to the next left position
+                output[index - 1] += output[index] / base;
+                
+                // This will keep only the remainder (digit less than base) in the current position
+                output[index] = output[index] % base;
+            }
+        }
+
+        // This will remove leading zeros by finding where the actual digits start
+        int firstNonZero = 0;
+        while (firstNonZero < output.length && output[firstNonZero] == 0) {
+            firstNonZero++;
+        }
+
+        // This will return [0] if the result is entirely zeros, or the trimmed array without leading zeros
+        if (firstNonZero == output.length) {
+            return new int[] {0};  // This will return zero if all digits are zero
+        } else {
+            return Arrays.copyOfRange(output, firstNonZero, output.length);  // This will return the result without leading zeros
+        }
+    }
+
+    public static void main(String[] args) {
+        // Example:
+        int[] num1 = {1, 2, 3, 4};  
+        int[] num2 = {5, 6, 7, 8};  
+        int base = 10;
+
+        // This will multiply the two numbers and store the result
+        int[] product = multiply(num1, num2, base);
+
+        // This will print out the final result as an array
+        System.out.println(Arrays.toString(product)); 
+    }
+}
